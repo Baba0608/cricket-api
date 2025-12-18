@@ -12,6 +12,13 @@ Rails.application.routes.draw do
       end
       resources :teams
       resources :matches
+
+      resources :friendships, only: [ :create ] do
+        member do
+          post :accept
+          post :reject
+        end
+      end
     end
   end
 
