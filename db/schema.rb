@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_18_060159) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_18_060837) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "matches", force: :cascade do |t|
+    t.string "name"
+    t.string "status"
+    t.bigint "player_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_matches_on_player_id"
+  end
 
   create_table "players", force: :cascade do |t|
     t.string "name"
@@ -42,6 +51,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_060159) do
     t.string "password_digest"
   end
 
+  add_foreign_key "matches", "players"
   add_foreign_key "players", "users"
   add_foreign_key "teams", "players"
 end
