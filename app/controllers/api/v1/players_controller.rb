@@ -1,21 +1,20 @@
 class Api::V1::PlayersController < ApplicationController
-  before_action :set_player, only: %i[ show update destroy ]
+  before_action :set_player, only: %i[ profile update destroy ]
 
-  # GET /players
-  def index
-    @players = Player.all
-
-    render json: @players
+  # GET /players/profile
+  def profile
+    render json: @player
   end
 
   # GET /players/1
   def show
+    @player = Player.find(id: params[:id])
     render json: @player
   end
 
   # POST /players
   def create
-    @player = Player.new(player_params)
+    @player = current_user.build_player(player_params)
 
     if @player.save
       render json: @player, status: :created
@@ -41,7 +40,7 @@ class Api::V1::PlayersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_player
-      @player = Player.find(params.expect(:id))
+      @player = Player.find_by(user_id: current_user.id)
     end
 
     # Only allow a list of trusted parameters through.
