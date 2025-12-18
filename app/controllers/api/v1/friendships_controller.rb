@@ -37,6 +37,21 @@ class Api::V1::FriendshipsController < ApplicationController
 
   # post /friendships/:id/accept
   def accept
+    friendship = Friendship.find(params[:id])
+
+    ActiveRecord::Base.transaction do
+      friendship.update!(status: :accepted)
+
+      Friendship.create!(
+        player_id: current_user.player.id,
+        friend_id: friendship.player_id,
+        status: :accepted
+      )
+    end
+
+    render json: { message: "Friend request accepted" }
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   # post /friendships/:id/reject
