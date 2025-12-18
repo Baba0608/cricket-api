@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_18_060837) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_18_134151) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "friendships", force: :cascade do |t|
+    t.bigint "player_id", null: false
+    t.bigint "friend_id", null: false
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["player_id", "friend_id"], name: "index_friendships_on_player_id_and_friend_id", unique: true
+    t.index ["player_id"], name: "index_friendships_on_player_id"
+  end
 
   create_table "matches", force: :cascade do |t|
     t.string "name"
@@ -51,6 +62,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_18_060837) do
     t.string "password_digest"
   end
 
+  add_foreign_key "friendships", "players"
+  add_foreign_key "friendships", "players", column: "friend_id"
   add_foreign_key "matches", "players"
   add_foreign_key "players", "users"
   add_foreign_key "teams", "players"
