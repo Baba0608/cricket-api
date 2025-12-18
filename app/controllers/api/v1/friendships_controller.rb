@@ -51,11 +51,18 @@ class Api::V1::FriendshipsController < ApplicationController
 
     render json: { message: "Friend request accepted" }
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
-    render json: { error: e.message }, status: :unprocessable_entity
+    render json: { errors: [ e.message ] }, status: :unprocessable_entity
   end
 
   # post /friendships/:id/reject
   def reject
+    friendship = Friendship.find(params[:id])
+
+    friendship.update!(status: :rejected)
+    render json: { message: "Friend request Rejected" }
+
+  rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotFound => e
+    render json: { errors: [ e.message ] }, status: :unprocessable_entity
   end
 
   private
