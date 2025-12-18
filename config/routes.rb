@@ -5,7 +5,11 @@ Rails.application.routes.draw do
       post "/login",  to: "auth#login"
 
       resources :users
-      resources :players
+      resources :players, except: [ :index ] do
+        collection do
+          get :profile
+        end
+      end
       resources :teams
       resources :matches
     end
