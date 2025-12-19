@@ -10,7 +10,7 @@ Rails.application.routes.draw do
           get :profile
         end
       end
-      resources :teams
+      resources :teams, only: [ :create, :update ]
       resources :matches
 
       resources :friendships, only: [ :create ] do

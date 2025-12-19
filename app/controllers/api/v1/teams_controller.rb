@@ -1,22 +1,10 @@
 class Api::V1::TeamsController < ApplicationController
-  before_action :set_team, only: %i[ show update destroy ]
+  before_action :set_team, only: %i[ update ]
 
-  # GET /teams
-  def index
-    @teams = Team.all
-
-    render json: @teams
-  end
-
-  # GET /teams/1
-  def show
-    render json: @team
-  end
 
   # POST /teams
   def create
-    @team = Team.new(team_params)
-
+    @team = current_player.teams.build(team_params)
     if @team.save
       render json: @team, status: :created
     else
@@ -26,16 +14,15 @@ class Api::V1::TeamsController < ApplicationController
 
   # PATCH/PUT /teams/1
   def update
+    if current_player.teams.first.id != params[:id].to_i
+      return render json: { errors: [ "Team id is not matching with current user's team_id" ] }, status: :unprocessable_content
+    end
+
     if @team.update(team_params)
       render json: @team
     else
       render json: @team.errors, status: :unprocessable_content
     end
-  end
-
-  # DELETE /teams/1
-  def destroy
-    @team.destroy!
   end
 
   private
@@ -46,6 +33,6 @@ class Api::V1::TeamsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def team_params
-      params.expect(team: [ :name, :player_id ])
+      params.expect(team: [ :name ])
     end
 end
