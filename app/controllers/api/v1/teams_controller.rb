@@ -15,8 +15,7 @@ class Api::V1::TeamsController < ApplicationController
 
   # POST /teams
   def create
-    @team = Team.new(team_params)
-
+    @team = current_player.teams.build(team_params)
     if @team.save
       render json: @team, status: :created
     else
@@ -46,6 +45,6 @@ class Api::V1::TeamsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def team_params
-      params.expect(team: [ :name, :player_id ])
+      params.expect(team: [ :name ])
     end
 end
