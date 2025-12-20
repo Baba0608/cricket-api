@@ -3,8 +3,8 @@ class Friendship < ApplicationRecord
   belongs_to :friend, class_name: "Player"
 
   enum :status, {
-    pending: "pending",
-    accepted: "accepted",
-    rejected: "rejected"
+    pending: "PENDING",
+    accepted: "ACCEPTED",
+    rejected: "REJECTED"
   }
 end

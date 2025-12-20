@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_19_111559) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_20_051534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_19_111559) do
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
     t.index ["player_id", "friend_id"], name: "index_friendships_on_player_id_and_friend_id", unique: true
     t.index ["player_id"], name: "index_friendships_on_player_id"
+  end
+
+  create_table "match_invites", force: :cascade do |t|
+    t.integer "invite_by_team_id"
+    t.integer "receive_by_team_id"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "players", force: :cascade do |t|
@@ -55,6 +63,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_19_111559) do
 
   add_foreign_key "friendships", "players"
   add_foreign_key "friendships", "players", column: "friend_id"
+  add_foreign_key "match_invites", "teams", column: "invite_by_team_id"
+  add_foreign_key "match_invites", "teams", column: "receive_by_team_id"
   add_foreign_key "players", "users"
   add_foreign_key "teams", "players", column: "created_by_player_id"
   add_foreign_key "teams", "players", column: "created_by_player_id"
