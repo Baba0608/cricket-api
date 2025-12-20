@@ -1,6 +1,9 @@
 class Player < ApplicationRecord
   belongs_to :user
-  has_many :teams
+  has_many :teams,
+           foreign_key: :created_by_player_id,
+           dependent: :destroy
+
   has_many :matches
 
   has_many :friendships, dependent: :destroy
