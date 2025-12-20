@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_20_051534) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_20_063501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -29,6 +29,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_20_051534) do
     t.integer "invite_by_team_id"
     t.integer "receive_by_team_id"
     t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "matches", force: :cascade do |t|
+    t.integer "team_a_id", null: false
+    t.integer "team_b_id", null: false
+    t.integer "toss_won_by_team_id"
+    t.string "toss_won_by_team_choose_to"
+    t.integer "winner_team_id"
+    t.integer "won_by_runs"
+    t.integer "won_by_wickets"
+    t.integer "status", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -65,6 +78,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_20_051534) do
   add_foreign_key "friendships", "players", column: "friend_id"
   add_foreign_key "match_invites", "teams", column: "invite_by_team_id"
   add_foreign_key "match_invites", "teams", column: "receive_by_team_id"
+  add_foreign_key "matches", "teams", column: "team_a_id"
+  add_foreign_key "matches", "teams", column: "team_b_id"
+  add_foreign_key "matches", "teams", column: "toss_won_by_team_id"
+  add_foreign_key "matches", "teams", column: "winner_team_id"
   add_foreign_key "players", "users"
   add_foreign_key "teams", "players", column: "created_by_player_id"
   add_foreign_key "teams", "players", column: "created_by_player_id"
