@@ -4,7 +4,7 @@ class Api::V1::TeamsController < ApplicationController
 
   # POST /teams
   def create
-    @team = current_player.teams.build(team_params)
+    @team = current_user.player.teams.build(team_params)
     if @team.save
       render json: @team, status: :created
     else
@@ -14,7 +14,7 @@ class Api::V1::TeamsController < ApplicationController
 
   # PATCH/PUT /teams/1
   def update
-    if current_player.teams.first.id != params[:id].to_i
+    if current_user.player.teams.first.id != params[:id].to_i
       return render json: { errors: [ "Team id is not matching with current user's team_id" ] }, status: :unprocessable_content
     end
 
