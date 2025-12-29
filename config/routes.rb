@@ -25,7 +25,12 @@ Rails.application.routes.draw do
           post :reject
         end
       end
-      resources :matches
+
+      resources :matches, except: [ :create ] do
+        member do
+          post :invite_player
+        end
+      end
 
       resources :friendships, only: [ :create ] do
         member do
