@@ -23,6 +23,8 @@ class Team < ApplicationRecord
            class_name: "Match",
            foreign_key: :winner_team_id
 
+  has_many :match_player_invites
+
   def matches
     Match.where(team_a_id: id).or(Match.where(team_b_id: id))
   end

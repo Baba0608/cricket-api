@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_20_063501) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_26_111509) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,6 +31,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_20_063501) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "match_player_invites", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.bigint "team_id", null: false
+    t.bigint "player_id", null: false
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_match_player_invites_on_match_id"
+    t.index ["player_id"], name: "index_match_player_invites_on_player_id"
+    t.index ["team_id"], name: "index_match_player_invites_on_team_id"
   end
 
   create_table "matches", force: :cascade do |t|
@@ -78,6 +90,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_20_063501) do
   add_foreign_key "friendships", "players", column: "friend_id"
   add_foreign_key "match_invites", "teams", column: "invite_by_team_id"
   add_foreign_key "match_invites", "teams", column: "receive_by_team_id"
+  add_foreign_key "match_player_invites", "matches"
+  add_foreign_key "match_player_invites", "players"
+  add_foreign_key "match_player_invites", "teams"
   add_foreign_key "matches", "teams", column: "team_a_id"
   add_foreign_key "matches", "teams", column: "team_b_id"
   add_foreign_key "matches", "teams", column: "toss_won_by_team_id"

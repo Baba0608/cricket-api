@@ -5,6 +5,8 @@ class Match < ApplicationRecord
   has_one :toss_won_by_team, class_name: "Team"
   has_one :winner_team, class_name: "Team"
 
+  has_many :match_player_invites
+
   enum :status, {
     not_started: 0,
     first_innings_inprogress: 1,

@@ -13,6 +13,8 @@ class Player < ApplicationRecord
            through: :friendships,
            source: :friend
 
+  has_many :match_player_invites
+
   has_many :received_friendships,
            class_name: "Friendship",
            foreign_key: :friend_id,
