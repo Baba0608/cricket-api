@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "/signup", to: "auth#signup"
       post "/login",  to: "auth#login"
+      delete "/logout", to: "auth#logout"
+      get "/me", to: "auth#me"
 
       resources :users
       resources :players, except: [ :index ] do

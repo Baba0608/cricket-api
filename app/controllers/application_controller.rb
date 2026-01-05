@@ -1,13 +1,14 @@
 class ApplicationController < ActionController::API
+  include ActionController::Cookies
+
   before_action :authenticate_request
 
   attr_reader :current_user
 
   def authenticate_request
-    header = request.headers["Authorization"]
-    return render_unauthorized unless header
+    token = cookies[:token]
+    return render_unauthorized unless token
 
-    token = header.split(" ").last
     decoded = JsonWebToken.decode(token)
     return render_unauthorized unless decoded
 
@@ -16,7 +17,8 @@ class ApplicationController < ActionController::API
   end
 
   private
-    def render_unauthorized
-      render json: { error: "Unauthorized" }, status: :unauthorized
-    end
+
+  def render_unauthorized
+    render json: { error: "Unauthorized" }, status: :unauthorized
+  end
 end
