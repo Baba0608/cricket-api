@@ -10,7 +10,7 @@ class Api::V1::MatchesController < ApplicationController
 
   # GET /matches/1
   def show
-    render json: @match
+    render json: @match.as_json(include: [ :team_a, :team_b, :toss_won_by_team, :winner_team ])
   end
 
   # PATCH/PUT /matches/1
