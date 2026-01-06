@@ -4,8 +4,6 @@ class Player < ApplicationRecord
            foreign_key: :created_by_player_id,
            dependent: :destroy
 
-  has_many :matches
-
   has_many :friendships, dependent: :destroy
 
   has_many :friends,

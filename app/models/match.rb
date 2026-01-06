@@ -2,8 +2,8 @@ class Match < ApplicationRecord
   belongs_to :team_a, class_name: "Team"
   belongs_to :team_b, class_name: "Team"
 
-  has_one :toss_won_by_team, class_name: "Team"
-  has_one :winner_team, class_name: "Team"
+  belongs_to :toss_won_by_team, class_name: "Team", optional: true
+  belongs_to :winner_team, class_name: "Team", optional: true
 
   has_many :match_player_invites
 
