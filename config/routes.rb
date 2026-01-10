@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       resources :players, except: [ :index ] do
         collection do
           get :profile
+          get :search
         end
         member do
           get :friends

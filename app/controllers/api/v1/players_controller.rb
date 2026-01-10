@@ -1,5 +1,5 @@
 class Api::V1::PlayersController < ApplicationController
-  before_action :set_player, only: %i[ profile update destroy friends ]
+  before_action :set_player, only: %i[ profile update destroy friends search]
 
   # GET /players/profile
   def profile
@@ -42,6 +42,13 @@ class Api::V1::PlayersController < ApplicationController
     render json: @player.friends.as_json(only: [ :id, :name, :role, :unique_id ])
   end
 
+  # GET /players/search?q=term or /players/search?player_name=&player_unique_id=&team_name=
+  def search
+    players = PlayerSearch.new(search_params, current_player: @player).call
+
+    render json: players.as_json(only: [ :id, :name, :role, :unique_id ])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_player
@@ -51,5 +58,9 @@ class Api::V1::PlayersController < ApplicationController
     # Only allow a list of trusted parameters through.
     def player_params
       params.expect(player: [ :name, :role, :bat_hand, :bowl_hand, :unique_id, :user_id ])
+    end
+
+    def search_params
+      params.permit(:q, :player_name, :player_unique_id, :team_name)
     end
 end
