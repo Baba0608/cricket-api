@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         end
         member do
           get :friends
+          get :friend_requests
         end
       end
       resources :teams, only: [ :create, :update ] do

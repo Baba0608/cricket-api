@@ -1,5 +1,5 @@
 class Api::V1::PlayersController < ApplicationController
-  before_action :set_player, only: %i[ profile update destroy friends search]
+  before_action :set_player, only: %i[ profile update destroy friends search friend_requests]
 
   # GET /players/profile
   def profile
@@ -47,6 +47,11 @@ class Api::V1::PlayersController < ApplicationController
     players = PlayerSearch.new(search_params, current_player: @player).call
 
     render json: players.as_json(only: [ :id, :name, :role, :unique_id ])
+  end
+
+  # GET /players/1/friend_requests
+  def friend_requests
+    render json: FriendRequestSerializer.new(@player).call
   end
 
   private
