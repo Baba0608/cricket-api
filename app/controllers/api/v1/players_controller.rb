@@ -1,5 +1,5 @@
 class Api::V1::PlayersController < ApplicationController
-  before_action :set_player, only: %i[ profile update destroy ]
+  before_action :set_player, only: %i[ profile update destroy friends ]
 
   # GET /players/profile
   def profile
@@ -37,10 +37,15 @@ class Api::V1::PlayersController < ApplicationController
     @player.destroy!
   end
 
+  # GET /players/1/friends
+  def friends
+    render json: @player.friends.as_json(only: [ :id, :name, :role, :unique_id ])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_player
-      @player = Player.find_by(user_id: current_user.id)
+      @player = Player.find_by!(user_id: current_user.id)
     end
 
     # Only allow a list of trusted parameters through.

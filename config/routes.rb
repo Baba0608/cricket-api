@@ -11,6 +11,9 @@ Rails.application.routes.draw do
         collection do
           get :profile
         end
+        member do
+          get :friends
+        end
       end
       resources :teams, only: [ :create, :update ] do
         resources :match_invites, only: [ :create ], module: :teams do
