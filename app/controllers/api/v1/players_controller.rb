@@ -39,7 +39,7 @@ class Api::V1::PlayersController < ApplicationController
 
   # GET /players/1/friends
   def friends
-    render json: @player.friends.as_json(only: [ :id, :name, :role, :unique_id ])
+    render json: @player.friends.as_json(only: [ :id, :name, :role, :unique_id ], include: [ :teams ])
   end
 
   # GET /players/search?q=term or /players/search?player_name=&player_unique_id=&team_name=
