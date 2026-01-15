@@ -1,9 +1,10 @@
 class Api::V1::MatchesController < ApplicationController
   before_action :set_match, only: %i[ show update destroy invite_player ]
+  before_action :set_team, only: %i[ index invite_player ]
 
   # GET /matches
   def index
-    @matches = Match.all
+    @matches = @team.matches.as_json(include: [ :team_a, :team_b, :toss_won_by_team, :winner_team ])
 
     render json: @matches
   end
@@ -29,14 +30,10 @@ class Api::V1::MatchesController < ApplicationController
 
   # POST /matches/1/invite_player
   def invite_player
-    current_team = current_user.player&.teams&.first
-      return render json: { errors: [ "Please create Profile/Team first to invite players" ] },
-                status: :forbidden unless current_team
-
     team_id = params.dig("match", "team_id")
     player_id = params.dig("match", "player_id")
 
-    if current_team.id != team_id
+    if @team.id != team_id
       return render json: { errors: [ "You can not invite players for other team" ] }, status: :forbidden
     end
 
@@ -72,6 +69,14 @@ class Api::V1::MatchesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_match
       @match = Match.find(params.expect(:id))
+    end
+
+    def set_team
+      @team = current_user.player.teams.first
+      unless @team
+        render json: { errors: [ "Please create Profile/Team first to invite players" ] },
+                  status: :forbidden
+      end
     end
 
     # Only allow a list of trusted parameters through.
