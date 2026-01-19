@@ -15,15 +15,11 @@ Rails.application.routes.draw do
         member do
           get :friends
           get :friend_requests
+          get :team
         end
       end
       resources :teams, only: [ :create, :update ] do
-        resources :match_invites, only: [ :create ], module: :teams do
-          collection do
-            get :sent
-            get :received
-          end
-        end
+        resources :match_invites, only: [ :index, :create ], module: :teams
       end
 
       resources :match_invites, only: [] do

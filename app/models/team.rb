@@ -28,4 +28,8 @@ class Team < ApplicationRecord
   def matches
     Match.where(team_a_id: id).or(Match.where(team_b_id: id))
   end
+
+  def match_invites
+    MatchInvite.where(invite_by_team_id: id).or(MatchInvite.where(receive_by_team_id: id))
+  end
 end

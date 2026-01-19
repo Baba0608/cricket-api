@@ -1,6 +1,7 @@
 class Api::V1::MatchInvitesController < ApplicationController
   before_action :set_match_invite, only: %i[ accept reject ]
 
+  # post /match_invites/:id/accept
   def accept
     if @match_invite.accepted? || @match_invite.rejected?
       return render json: { errors: [ "Invite already accepted or rejected" ] }, status: :unprocessable_content
@@ -22,6 +23,7 @@ class Api::V1::MatchInvitesController < ApplicationController
     end
   end
 
+  # post /match_invites/:id/reject
   def reject
     if @match_invite.accepted? || @match_invite.rejected?
       return render json: { errors: [ "Invite already accepted or rejected" ] }, status: :unprocessable_content
