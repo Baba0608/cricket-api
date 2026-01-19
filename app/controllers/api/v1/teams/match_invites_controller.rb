@@ -1,9 +1,8 @@
 class Api::V1::Teams::MatchInvitesController < ApplicationController
+  before_action :set_team, only: %i[ create index ]
   # POST teams/:team_id/match_invites
   def create
-    team = Team.find(params[:team_id])
-
-    @match_invite = team.sent_match_invites.new(
+    @match_invite = @team.sent_match_invites.new(
       receive_by_team_id: params.dig(:match_invite, :team_id),
       status: :pending
     )
@@ -15,17 +14,20 @@ class Api::V1::Teams::MatchInvitesController < ApplicationController
     end
   end
 
-  # GET teams/:team_id/match_invites/sent
-  def sent
-  end
+  # GET teams/:team_id/match_invites
+  def index
+    @match_invites = @team.match_invites.includes(:inviting_team, :receiving_team)
 
-  # GET teams/:team_id/match_invites/received
-  def received
+    render json: MatchInviteSerializer.new(@match_invites, @team).call
   end
 
   private
     # Only allow a list of trusted parameters through.
     def match_invite_params
       params.expect(match_invite: [ :invite_by_team_id, :receive_by_team_id, :status ])
+    end
+
+    def set_team
+      @team = Team.find(params[:team_id])
     end
 end
